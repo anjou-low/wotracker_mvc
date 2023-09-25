@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wotracker mvc</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="js/app.js" type="module"></script>
+</head>
+<body>
+
+    <navbar>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="#" app-id="link-back">
+                    <i class="bx bx-arrow-back" style="font-size: 1rem;"></i>
+                    <span app-id="link-back-text" style="font-size: 1rem;">Back to Home</span>
+                </a>
+                <!-- <a href="#" class="bx bx-arrow-back" app-id="link-back"></a> -->
+            </li>
+            <!-- <li class="nav-item">
+                <h2>Push Workout</h2>
+                <span>Workout Name</span>
+            </li> -->
+            <li class="nav-item">
+                <button class="btn-wireframe">Export</button>
+            </li>
+        </ul>
+    </navbar>
+
+    <main>
+        <section class="page-header">
+            <h2 app-id="page-title">Home</h2>
+            <button class="btn-primary" app-id="btn-add">Add workout</button>
+        </section>
+        <section class="editor" app-id="editor">
+            <h3>Edit workout</h3>
+                <input type="text" placeholder="Workout name" app-id="input-workout-name">
+                <input type="date" app-id="input-workout-date">
+                <input type="text" placeholder="Exercise name" app-id="input-exercise-name">
+                <input type="text" placeholder="Exercise tags" app-id="input-exercise-tags">
+                <input type="text" placeholder="Repetitions" app-id="input-set-repetitions">
+                <input type="text" placeholder="Weight" app-id="input-set-weight">
+                <input type="text" placeholder="Set tags" app-id="input-set-tags">
+                <input type="text" placeholder="Set RPE" app-id="input-set-rpe">
+            <div>
+                <button class="btn-primary" app-id="btn-add-or-save">Create workout</button>
+                <button class="btn-primary" app-id="btn-cancel">Cancel</button>
+            </div>
+        </section>
+        <section>
+            <table class="data-table" app-id="data-table">
+                <tr>
+                    <th>Workout</th>
+                    <th>Date</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr>
+                    <td><a href="foo">Pull</a></td>
+                    <td>23-22-2023</td>
+                    <td>
+                        <i class="bx bx-edit"></i>
+                        <i class="bx bx-trash"></i>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+</body>
+</html>
