@@ -36,17 +36,23 @@
             <button class="btn-primary" app-id="btn-add">Add workout</button>
         </section>
         <section class="editor" app-id="editor">
-            <h3>Edit workout</h3>
-                <input type="text" placeholder="Workout name" app-id="input-workout-name">
-                <input type="date" app-id="input-workout-date">
-                <input type="text" placeholder="Exercise name" app-id="input-exercise-name">
-                <input type="text" placeholder="Exercise tags" app-id="input-exercise-tags">
-                <input type="text" placeholder="Repetitions" app-id="input-set-repetitions">
-                <input type="text" placeholder="Weight" app-id="input-set-weight">
-                <input type="text" placeholder="Set tags" app-id="input-set-tags">
-                <input type="text" placeholder="Set RPE" app-id="input-set-rpe">
+            <h3 app-id="editor-title">Add workout</h3>
+                <div class="editor-inputs-container" app-id="inputs-workout">
+                    <input type="text" placeholder="Workout name" app-id="input-workout-name">
+                    <input type="date" app-id="input-workout-date">
+                </div>
+                <div class="editor-inputs-container" app-id="inputs-exercise">
+                    <input type="text" placeholder="Exercise name" app-id="input-exercise-name">
+                    <input type="text" placeholder="Exercise tags" app-id="input-exercise-tags">
+                </div>
+                <div class="editor-inputs-container" app-id="inputs-set">
+                    <input type="text" placeholder="Repetitions" app-id="input-set-repetitions">
+                    <input type="text" placeholder="Weight" app-id="input-set-weight">
+                    <input type="text" placeholder="Set tags" app-id="input-set-tags">
+                    <input type="text" placeholder="Set RPE" app-id="input-set-rpe">
+                </div>
             <div>
-                <button class="btn-primary" app-id="btn-add-or-save">Create workout</button>
+                <button class="btn-primary" app-id="btn-create">Create</button>
                 <button class="btn-primary" app-id="btn-cancel">Cancel</button>
             </div>
         </section>

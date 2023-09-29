@@ -30,6 +30,10 @@ main {
     margin: 2rem 2rem 1rem;
 }
 
+ul {
+    list-style: none;
+}
+
 .nav-list {
     background-color: white;
     box-shadow: 0px 0px 10px var(--clr-gray200);
@@ -92,6 +96,13 @@ main {
     transition: opacity 1s ease-in;
 }
 
+.editor-inputs-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .data-table {
     width: 100%;
     border-collapse: separate;
@@ -117,6 +128,11 @@ th:last-child {
 td {
     padding: 1.4rem 0rem 1.4rem;
     background-color: white;
+    cursor: pointer;
+}
+
+table span {
+    cursor: text;
 }
 
 td:first-child {
@@ -127,6 +143,16 @@ td:first-child {
 td:last-child {
     border-top-right-radius: var(--radius-table);
     border-bottom-right-radius: var(--radius-table);
+}
+td input {
+    display: none;
+}
+td.editing span, p {
+    display: none;
+}
+
+td.editing input {
+    display: inline;
 }
 
 .btn-primary {
@@ -161,4 +187,30 @@ td:last-child {
 .btn-wireframe:hover {
     color: var(--clr-primary-hover);
     border: solid 2px var(--clr-primary-hover);
+}
+
+.dropdown-list {
+    position: relative;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dropdown-list ul {
+    position: absolute;
+    list-style: none;
+    border: 1px solid black;
+    border-radius: var(--radius);
+    background-color: white;
+    text-align: left;
+}
+
+.dropdown-list li {
+    padding: .25rem .25rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+.shown {
+    display: flex;
 }
