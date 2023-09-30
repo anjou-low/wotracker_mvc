@@ -10,70 +10,32 @@
     <script src="js/app.js" type="module"></script>
 </head>
 <body>
-
-    <navbar>
-        <ul class="nav-list">
-            <li class="nav-item">
-                <a href="#" app-id="link-back">
-                    <i class="bx bx-arrow-back" style="font-size: 1rem;"></i>
-                    <span app-id="link-back-text" style="font-size: 1rem;">Back to Home</span>
-                </a>
-                <!-- <a href="#" class="bx bx-arrow-back" app-id="link-back"></a> -->
-            </li>
-            <!-- <li class="nav-item">
-                <h2>Push Workout</h2>
-                <span>Workout Name</span>
-            </li> -->
-            <li class="nav-item">
-                <button class="btn-wireframe">Export</button>
-            </li>
-        </ul>
-    </navbar>
+    <nav>
+        <a id="link-back" href="#"></a>
+        <button class="btn-wireframe">Settings</button>
+    </nav>
 
     <main>
-        <section class="page-header">
-            <h2 app-id="page-title">Home</h2>
-            <button class="btn-primary" app-id="btn-add">Add workout</button>
+        <section class="data-header">
+            <h1 id="page-title">Squat</h1>
+            <btn id="btn-add" class="btn-primary">Add workout</btn>
         </section>
-        <section class="editor" app-id="editor">
-            <h3 app-id="editor-title">Add workout</h3>
-                <div class="editor-inputs-container" app-id="inputs-workout">
-                    <input type="text" placeholder="Workout name" app-id="input-workout-name">
-                    <input type="date" app-id="input-workout-date">
-                </div>
-                <div class="editor-inputs-container" app-id="inputs-exercise">
-                    <input type="text" placeholder="Exercise name" app-id="input-exercise-name">
-                    <input type="text" placeholder="Exercise tags" app-id="input-exercise-tags">
-                </div>
-                <div class="editor-inputs-container" app-id="inputs-set">
-                    <input type="text" placeholder="Repetitions" app-id="input-set-repetitions">
-                    <input type="text" placeholder="Weight" app-id="input-set-weight">
-                    <input type="text" placeholder="Set tags" app-id="input-set-tags">
-                    <input type="text" placeholder="Set RPE" app-id="input-set-rpe">
-                </div>
-            <div>
-                <button class="btn-primary" app-id="btn-create">Create</button>
-                <button class="btn-primary" app-id="btn-cancel">Cancel</button>
-            </div>
-        </section>
-        <section>
-            <table class="data-table" app-id="data-table">
-                <tr>
-                    <th>Workout</th>
-                    <th>Date</th>
-                    <th>&nbsp;</th>
-                </tr>
-                <tr>
-                    <td><a href="foo">Pull</a></td>
-                    <td>23-22-2023</td>
-                    <td>
-                        <i class="bx bx-edit"></i>
-                        <i class="bx bx-trash"></i>
-                    </td>
-                </tr>
-            </table>
-        </section>
+        <table class="data-table">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
     </main>
 
+    <footer>
+        <p>Created by Anjou Lo</p>
+        <p>Based on
+            <a href="https://github.com/1Marc/todomvc-vanillajs-2022">Vanilla JS TodoMVC</a>
+            by Marc Grabanski
+        </p>
+        <p>
+            Project on GitHub:
+            <a href="https://github.com">Minimalist WoTracker</a>
+        </p>
+    </footer>
 </body>
 </html>
