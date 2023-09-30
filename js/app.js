@@ -71,6 +71,8 @@ const App = {
     init() {
         Workouts.addEventListener("save", App.render);
 
+        App.$.clickInterceptor = document.querySelector(".click-intercept");
+
         App.$.linkBack  = document.querySelector("#link-back");
         App.$.pageTitle = document.querySelector("#page-title");
         App.$.btnAdd    = document.querySelector("#btn-add");
@@ -81,6 +83,22 @@ const App = {
             console.log("HashChanged");
             App._updateRoute();
             App.render();
+        });
+
+        App.$.clickInterceptor.addEventListener("click", (e) => {
+            App.$.clickInterceptor.classList.remove("show-intercept");
+
+            const modal = App.$.tbody.querySelector(".shown-modal");
+            if (modal) {
+                modal.classList.remove("shown-modal");
+            }
+
+            const input = App.$.tbody.querySelector(".shown");
+            if (input) {
+                input.trigger("focusout");
+            }
+
+            e.stopPropagation();
         });
 
         //TODO: Fix doesn't trigger on callback syntax.
@@ -123,16 +141,7 @@ const App = {
             const el = e.target.closest("td");
             const modal = el.querySelector(".options-modal");
             modal.classList.add("shown-modal");
-        });
-
-        //TODO: Fix hacky way of closing options modal.
-        document.addEventListener("click", (e) => {
-            if (!e.target.matches("i")) {
-                const modals = App.$.tbody.querySelectorAll(".shown-modal");
-                for (const modal of modals) {
-                    modal.classList.remove("shown-modal");
-                }
-            }
+            App.$.clickInterceptor.classList.add("show-intercept");
         });
 
         delegate(App.$.tbody, "#option-delete", "click", (e) => {
@@ -256,7 +265,7 @@ const App = {
                                     <i class="bx bx-down-arrow-alt"></i>
                                     Move down
                                 </li>
-                                <li>
+                                <li id="option-delete">
                                     <i class="bx bx-trash"></i>
                                     Delete
                                 </li>
@@ -343,7 +352,7 @@ const App = {
                                     <i class="bx bx-down-arrow-alt"></i>
                                     Move down
                                 </li>
-                                <li>
+                                <li id="option-delete">
                                     <i class="bx bx-trash"></i>
                                     Delete
                                 </li>
