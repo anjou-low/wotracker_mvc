@@ -32,7 +32,7 @@ const App = {
             case "home":
                 App.route.render            = App._renderAsHomePage;
                 App.route.navigate          = (workoutId) => window.location.hash = `/workout/${workoutId}`;
-                App.route.createPageElement = () => Workouts.addWorkout("Foo", "2012-12-12");
+                App.route.createPageElement = () => Workouts.addWorkout("Legs", "2012-12-12");
                 App.route.getPageElement    = (workoutId) => Workouts.getWorkout(workoutId);
                 App.route.editPageElement   = (workout)   => Workouts.editWorkout(workout);
                 App.route.movePageElementUp = () => { return; }
@@ -79,11 +79,12 @@ const App = {
 
         App.$.clickInterceptor = document.querySelector(".click-intercept");
 
-        App.$.linkBack  = document.querySelector("#link-back");
-        App.$.pageTitle = document.querySelector("#page-title");
-        App.$.btnAdd    = document.querySelector("#btn-add");
-        App.$.thead     = document.querySelector("thead");
-        App.$.tbody     = document.querySelector("tbody");
+        App.$.linkBack     = document.querySelector("#link-back");
+        App.$.linkBackText = App.$.linkBack.querySelector("span");
+        App.$.pageTitle    = document.querySelector("#page-title");
+        App.$.btnAdd       = document.querySelector("#btn-add");
+        App.$.thead        = document.querySelector("thead");
+        App.$.tbody        = document.querySelector("tbody");
 
         window.addEventListener("hashchange", () => {
             console.log("HashChanged");
@@ -181,8 +182,7 @@ const App = {
         App.render();
     },
     _renderAsHomePage() {
-        App.$.linkBack.style.display = "none";
-
+        App.$.linkBackText.innerText  = "Back to root";
         App.$.pageTitle.innerText = "Home";
         App.$.btnAdd.innerText    = "Add workout";
 
@@ -245,8 +245,7 @@ const App = {
 
         const workout = Workouts.workouts.find((workout) => workout.id === App.route.workoutId);
 
-        App.$.linkBack.style.display = "inline";
-        App.$.linkBack.innerText = "Back to home";
+        App.$.linkBackText.innerText = "Back to home";
         App.$.linkBack.href      = "#";
 
         App.$.pageTitle.innerText        = `${workout.name}`;
@@ -313,9 +312,8 @@ const App = {
             console.log("ExercisePage::exerciseDoesntExist");
             return;
         }
-
-        App.$.linkBack.style.display = "inline";
-        App.$.linkBack.innerText = `Back to ${workout.name}`;
+// 
+        App.$.linkBackText.innerText = `Back to ${workout.name}`;
         App.$.linkBack.href      = `#/workout/${workout.id}`;
 
         App.$.pageTitle.innerText = `${exercise.name}`;
