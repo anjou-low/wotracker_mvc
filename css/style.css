@@ -100,10 +100,26 @@ footer {
     text-align: center;
 }
 
-.editable-entry:hover {
+.editable-entry {
+    position: relative;
+    display: inline-block;
+}
+
+.editable-entry span:hover {
     color: var(--clr-blue);
     cursor: text;
 }
+
+.editable-entry input {
+    display: none;
+    position: absolute;
+    width: 50px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
 
 .editable-entry-input {
     display: none;
@@ -146,7 +162,7 @@ footer {
 }
 
 .shown {
-    display: block;
+    display: block !important;
 }
 
 .shown-modal {
@@ -185,7 +201,7 @@ th:last-child {
 }
 
 .btn-more-options {
-    display: block;
+    /* display: block; */
     border-style: none;
     outline: none;
     background: none;

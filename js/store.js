@@ -116,8 +116,10 @@ export const Store = class extends EventTarget {
             return;
         }
 
+
         exercise.sets.push({
             id: Date.now(),
+            index: exercise.sets.length + 1,
             repetitions,
             weight,
             rpe,
@@ -151,7 +153,11 @@ export const Store = class extends EventTarget {
             return;
         }
 
-        exercise.sets = exercise.sets.filter((set) => set.id != setId);
+        const setIndex = exercise.sets.find((set) => set.id == setId).index;
+        console.log(setIndex);
+        exercise.sets  = exercise.sets.filter((set) => set.id != setId);
+        exercise.sets  = exercise.sets.map((set) => (set.index > setIndex) ? {...set, index: set.index -1} : set);
+
 
         this._onExerciseModified(exercise);
 

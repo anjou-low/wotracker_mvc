@@ -108,16 +108,27 @@ const App = {
             App.route.navigate(e.target.closest("tr").dataset.id);
         });
 
-        delegate(App.$.tbody, ".editable-entry", "click", (e) => {
+        //delegate(App.$.tbody, ".editable-entry", "click", (e) => {
+        //    const el    = e.target.closest("td");
+        //    const input = el.querySelector("input");
+        //    input.style.width = `${e.target.offsetWidth + 15}px`;
+        //    input.classList.add("shown");
+        //    input.select();
+        //    input.focus();
+        //});
+
+        delegate(App.$.tbody, ".editable-entry span", "click", (e) => {
+            console.log(e.target);
             const el    = e.target.closest("td");
             const input = el.querySelector("input");
+            console.log(input);
             input.style.width = `${e.target.offsetWidth + 15}px`;
             input.classList.add("shown");
             input.select();
             input.focus();
         });
 
-        delegate(App.$.tbody, ".editable-entry-input", "keyup", (e) => {
+        delegate(App.$.tbody, ".editable-entry input", "keyup", (e) => {
             const el = e.target.closest("td");
             if (e.key == "Enter") {
                 e.target.classList.remove("shown");
@@ -129,7 +140,7 @@ const App = {
             }
         });
 
-        delegate(App.$.tbody, ".editable-entry-input", "focusout", (e) => {
+        delegate(App.$.tbody, ".editable-entry input", "focusout", (e) => {
             const el = e.target.closest("td");
             e.target.value = el.querySelector(".editable-entry").innerText;
             e.target.classList.remove("shown");
@@ -145,6 +156,7 @@ const App = {
         });
 
         delegate(App.$.tbody, "#option-delete", "click", (e) => {
+            App.$.clickInterceptor.classList.remove("show-intercept");
             App.route.deletePageElement(e.target.closest("tr").dataset.id);
         });
 
@@ -178,15 +190,15 @@ const App = {
             tr.insertAdjacentHTML("afterbegin", 
                 `
                     <td>
-                        <div style="position:relative; display:inline-block;">
-                            <span class="editable-entry">${workout.name}</span>
-                            <input class="editable-entry-input" type="text" value="${workout.name}" data-key="name">
+                        <div class="editable-entry">
+                            <span>${workout.name}</span>
+                            <input type="text" value="${workout.name}" data-key="name">
                         </div>
                     </td>
                     <td>
-                        <div style="position:relative;">
-                            <span class="editable-entry">${workout.date}</span>
-                            <input class="editable-entry-input" type="date" value="${workout.date}" data-key="date">
+                        <div class="editable-entry">
+                            <span>${workout.date}</span>
+                            <input type="date" value="${workout.date}" data-key="date">
                         </div>
                     </td>
                     <td>
@@ -244,9 +256,9 @@ const App = {
             tr.insertAdjacentHTML("afterbegin", 
                 `
                     <td>
-                        <div style="position:relative;">
-                            <span class="editable-entry">${exercise.name}</span>
-                            <input class="editable-entry-input type="text" value="${exercise.name}" data-key="name">
+                        <div class="editable-entry">
+                            <span>${exercise.name}</span>
+                            <input type="text" value="${exercise.name}" data-key="name">
                         </div>
                     </td>
                     <td>${exercise.num_sets}</td>
@@ -319,23 +331,23 @@ const App = {
 
             tr.insertAdjacentHTML("afterbegin", 
                 `
-                    <td>${count}</td>
+                    <td>${set.index}</td>
                     <td>
-                        <div style="position:relative;">
-                            <span class="editable-entry">${set.repetitions}</span>
-                            <input class="editable-entry-input" type="text" value="${set.repetitions}" data-key="repetitions">
+                        <div class="editable-entry">
+                            <span>${set.repetitions}</span>
+                            <input type="text" value="${set.repetitions}" data-key="repetitions">
                         </div>
                     </td>
                     <td>
-                        <div style="position:relative;">
-                            <span class="editable-entry">${set.weight}</span>
-                            <input class="editable-entry-input" type="text" value="${set.weight}" data-key="weight">
+                        <div class="editable-entry">
+                            <span>${set.weight}</span>
+                            <input type="text" value="${set.weight}" data-key="weight">
                         </div>
                     </td>
                     <td>
-                        <div style="position:relative;">
-                            <span class="editable-entry">${set.rpe}</span>
-                            <input class="editable-entry-input" type="text" value="${set.rpe}" data-key="rpe">
+                        <div class="editable-entry">
+                            <span>${set.rpe}</span>
+                            <input type="text" value="${set.rpe}" data-key="rpe">
                         </div>
                     </td>
                     <td>
@@ -344,14 +356,8 @@ const App = {
                                 <i class="bx bx-dots-horizontal-rounded"></i>
                             </button>
                             <ul class="options-modal">
-                                <li>
-                                    <i class="bx bx-up-arrow-alt"></i>
-                                    Move up
-                                </li>
-                                <li>
-                                    <i class="bx bx-down-arrow-alt"></i>
-                                    Move down
-                                </li>
+                                ${set.index == 1 ? '' : '<li><i class="bx bx-up-arrow-alt"></i>Move up</li>'}
+                                ${set.index == exercise.sets.length ? '' : '<li><i class="bx bx-down-arrow-alt"></i>Move down</li>'}
                                 <li id="option-delete">
                                     <i class="bx bx-trash"></i>
                                     Delete
