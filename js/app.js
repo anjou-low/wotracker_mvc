@@ -35,6 +35,8 @@ const App = {
                 App.route.createPageElement = () => Workouts.addWorkout("Foo", "2012-12-12");
                 App.route.getPageElement    = (workoutId) => Workouts.getWorkout(workoutId);
                 App.route.editPageElement   = (workout)   => Workouts.editWorkout(workout);
+                App.route.movePageElementUp = () => { return; }
+                App.route.movePageElementDown = () => { return; }
                 App.route.deletePageElement = (workoutId) => Workouts.removeWorkout(workoutId);
                 break;
             case "workout":
@@ -43,6 +45,8 @@ const App = {
                 App.route.createPageElement = () => Workouts.addExercise(App.route.workoutId, "Bar");
                 App.route.getPageElement    = (exerciseId) => Workouts.getExerciseById(App.route.workoutId, exerciseId);
                 App.route.editPageElement   = (exercise)   => Workouts.editExercise(App.route.workoutId, exercise);
+                App.route.movePageElementUp = (exerciseId) => Workouts.moveExercise(App.route.workoutId, exerciseId, -1);
+                App.route.movePageElementDown = (exerciseId) => Workouts.moveExercise(App.route.workoutId, exerciseId, 1);
                 App.route.deletePageElement = (exerciseId) => Workouts.removeExercise(App.route.workoutId, exerciseId);
                 break;
             case "exercise":
@@ -51,6 +55,8 @@ const App = {
                 App.route.createPageElement = () => Workouts.addSet(App.route.workoutId, App.route.exerciseId, 10, 10, 10);
                 App.route.getPageElement    = (setId) => Workouts.getSetById(App.route.workoutId, App.route.exerciseId, setId);
                 App.route.editPageElement   = (set)   => Workouts.editSet(App.route.workoutId, App.route.exerciseId, set);
+                App.route.movePageElementUp = (setId) => Workouts.moveSet(App.route.workoutId, App.route.exerciseId, setId, -1);
+                App.route.movePageElementDown = (setId) => Workouts.moveSet(App.route.workoutId, App.route.exerciseId, setId, 1);
                 App.route.deletePageElement = (setId) => Workouts.removeSet(App.route.workoutId, App.route.exerciseId, setId);
                 break;
         }
@@ -159,6 +165,17 @@ const App = {
             App.$.clickInterceptor.classList.remove("show-intercept");
             App.route.deletePageElement(e.target.closest("tr").dataset.id);
         });
+        
+        delegate(App.$.tbody, "#option-move-up", "click", (e) => {
+            App.$.clickInterceptor.classList.remove("show-intercept");
+            App.route.movePageElementUp(e.target.closest("tr").dataset.id);
+
+        });
+
+        delegate(App.$.tbody, "#option-move-down", "click", (e) => {
+            App.$.clickInterceptor.classList.remove("show-intercept");
+            App.route.movePageElementDown(e.target.closest("tr").dataset.id);
+        });
 
         App._updateRoute();
         App.render();
@@ -248,7 +265,7 @@ const App = {
         );
 
         App.$.tbody.replaceChildren();
-        for (const exercise of workout.exercises) {
+        for (const exercise of workout.exercises.sort((exerciseA, exerciseB) => exerciseA.index - exerciseB.index)) {
             const tr = document.createElement("tr");
             tr.dataset.id = exercise.id;
 
@@ -269,14 +286,8 @@ const App = {
                                 <i class="bx bx-dots-horizontal-rounded"></i>
                             </button>
                             <ul class="options-modal">
-                                <li>
-                                    <i class="bx bx-up-arrow-alt"></i>
-                                    Move up
-                                </li>
-                                <li>
-                                    <i class="bx bx-down-arrow-alt"></i>
-                                    Move down
-                                </li>
+                                ${exercise.index == 1 ? '' : '<li id="option-move-up"><i class="bx bx-up-arrow-alt"></i>Move up</li>'}
+                                ${exercise.index == exercise.sets.length ? '' : '<li id="option-move-down"><i class="bx bx-down-arrow-alt"></i>Move down</li>'}
                                 <li id="option-delete">
                                     <i class="bx bx-trash"></i>
                                     Delete
@@ -325,7 +336,7 @@ const App = {
 
         App.$.tbody.replaceChildren();
         let count = 1;
-        for (const set of exercise.sets) {
+        for (const set of exercise.sets.sort((setA, setB) => setA.index - setB.index)) {
             const tr = document.createElement("tr");
             tr.dataset.id = set.id;
 
@@ -347,7 +358,7 @@ const App = {
                     <td>
                         <div class="editable-entry">
                             <span>${set.rpe}</span>
-                            <input type="text" value="${set.rpe}" data-key="rpe">
+                            <input type="text" value="${set.rpe}" data-key="rpe" data-type="integer">
                         </div>
                     </td>
                     <td>
@@ -356,8 +367,8 @@ const App = {
                                 <i class="bx bx-dots-horizontal-rounded"></i>
                             </button>
                             <ul class="options-modal">
-                                ${set.index == 1 ? '' : '<li><i class="bx bx-up-arrow-alt"></i>Move up</li>'}
-                                ${set.index == exercise.sets.length ? '' : '<li><i class="bx bx-down-arrow-alt"></i>Move down</li>'}
+                                ${set.index == 1 ? '' : '<li id="option-move-up"><i class="bx bx-up-arrow-alt"></i>Move up</li>'}
+                                ${set.index == exercise.sets.length ? '' : '<li id="option-move-down"><i class="bx bx-down-arrow-alt"></i>Move down</li>'}
                                 <li id="option-delete">
                                     <i class="bx bx-trash"></i>
                                     Delete

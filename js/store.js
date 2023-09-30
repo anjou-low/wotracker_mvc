@@ -62,11 +62,22 @@ export const Store = class extends EventTarget {
 
         workout.exercises.push({
             id: Date.now(),
+            index: workout.exercises.length + 1,
             name,
             num_sets: 0,
             mean_rpe: 0,
             sets: [],
         });
+
+        this._save();
+    }
+
+    moveExercise(workoutId, exerciseId, value) {
+        const workout  = this.getWorkout(workoutId);
+        const target   = workout.exercises.find(exercise => exercise.id == exerciseId);
+        const swapped  = workout.exercises.find(exercise => exercise.index == target.index + value);
+        target.index  += value;
+        swapped.index -= value;
 
         this._save();
     }
@@ -85,13 +96,19 @@ export const Store = class extends EventTarget {
             return;
         }
 
-        workout.exercises = workout.exercises.filter((exercise) => exercise.id != exerciseId);
+        const exerciseIndex = workout.exercises.find(exercise => exercise.id == exerciseId).index;
+        workout.exercises = workout.exercises.filter(exercise => exercise.id != exerciseId);
+        workout.exercises = workout.exercises.map(exercise => (exercise.index > exerciseIndex) ? {...exercise, index: exercise.index - 1} : exercise);
+
         this._save();
     }
 
     _onExerciseModified(exercise) {
         exercise.num_sets = exercise.sets.length;
-        exercise.mean_rpe = exercise.num_sets > 0 ? exercise.sets.reduce((acc, set) => acc + set.rpe, 0) / exercise.num_sets : 0;
+        if (exercise.num_sets > 0) {
+            exercise.mean_rpe = exercise.sets.reduce((acc, set) => acc + parseInt(set.rpe), 0) / exercise.num_sets;
+        }
+        else { exercise.mean_rpe = 0; }
 
         this._save();
     }
@@ -130,6 +147,16 @@ export const Store = class extends EventTarget {
         this._save();
     }
 
+    moveSet(workoutId, exerciseId, setId, value) {
+        const exercise = this.getExerciseById(workoutId, exerciseId);
+        const target   = exercise.sets.find(set => set.id == setId);
+        const swapped  = exercise.sets.find(set => set.index == target.index + value);
+        target.index  += value;
+        swapped.index -= value;
+
+        this._save();
+    }
+
     editSet(workoutId, exerciseId, set)
     {
         const exercise = this.getExerciseById(workoutId, exerciseId);
@@ -154,10 +181,8 @@ export const Store = class extends EventTarget {
         }
 
         const setIndex = exercise.sets.find((set) => set.id == setId).index;
-        console.log(setIndex);
         exercise.sets  = exercise.sets.filter((set) => set.id != setId);
         exercise.sets  = exercise.sets.map((set) => (set.index > setIndex) ? {...set, index: set.index -1} : set);
-
 
         this._onExerciseModified(exercise);
 
