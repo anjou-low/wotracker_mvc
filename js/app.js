@@ -1,4 +1,4 @@
-import { delegate, getRouteFromHash } from "./helpers.js";
+import { delegate, getRouteFromHash, validateKeyType, keyTypeErrorMessage } from "./helpers.js";
 import { Store } from "./store.js";
 
 const Workouts = new Store("todo-key");
@@ -74,10 +74,29 @@ const App = {
         inputSetRPE: null,
         dataTable: null
     },
+    _showAlert(alertText) {
+        App.$.alert.classList.add("show-alert");
+        App.$.alertText.innerText = alertText;
+        App.$.alert.animate([
+            {opacity: 0}, {opacity: 1}
+        ], {duration: 200});
+    },
+    _destroyAlert() {
+        const fadeOut = App.$.alert.animate([
+            {opacity: 1}, {opacity: 0}
+        ], {duration: 200});
+        fadeOut.addEventListener("finish", () => {
+            App.$.alert.classList.remove("show-alert");
+        });
+    },
     init() {
         Workouts.addEventListener("save", App.render);
 
         App.$.clickInterceptor = document.querySelector(".click-intercept");
+
+        App.$.alert     = document.querySelector(".alert");
+        App.$.alertText = App.$.alert.querySelector("span");
+        App.$.alertBtnClose = App.$.alert.querySelector("button");
 
         App.$.linkBack     = document.querySelector("#link-back");
         App.$.linkBackText = App.$.linkBack.querySelector("span");
@@ -91,6 +110,8 @@ const App = {
             App._updateRoute();
             App.render();
         });
+
+        App.$.alertBtnClose.addEventListener("click", App._destroyAlert);
 
         App.$.clickInterceptor.addEventListener("click", (e) => {
             App.$.clickInterceptor.classList.remove("show-intercept");
@@ -115,15 +136,6 @@ const App = {
             App.route.navigate(e.target.closest("tr").dataset.id);
         });
 
-        //delegate(App.$.tbody, ".editable-entry", "click", (e) => {
-        //    const el    = e.target.closest("td");
-        //    const input = el.querySelector("input");
-        //    input.style.width = `${e.target.offsetWidth + 15}px`;
-        //    input.classList.add("shown");
-        //    input.select();
-        //    input.focus();
-        //});
-
         delegate(App.$.tbody, ".editable-entry span", "click", (e) => {
             console.log(e.target);
             const el    = e.target.closest("td");
@@ -140,10 +152,16 @@ const App = {
             if (e.key == "Enter") {
                 e.target.classList.remove("shown");
 
-                App.route.editPageElement({
-                    ...App.route.getPageElement(el.closest("tr").dataset.id),
-                    [e.target.dataset.key]: e.target.value.trim()
-                });
+                const validation = validateKeyType(e.target.dataset.key, e.target.value.trim());
+                if (!validation.success) {
+                    App._showAlert(keyTypeErrorMessage[e.target.dataset.key]);
+                }
+                else {
+                    App.route.editPageElement({
+                        ...App.route.getPageElement(el.closest("tr").dataset.id),
+                        [e.target.dataset.key]: validation.value
+                    });
+                }
             }
         });
 
@@ -286,7 +304,7 @@ const App = {
                             </button>
                             <ul class="options-modal">
                                 ${exercise.index == 1 ? '' : '<li id="option-move-up"><i class="bx bx-up-arrow-alt"></i>Move up</li>'}
-                                ${exercise.index == exercise.sets.length ? '' : '<li id="option-move-down"><i class="bx bx-down-arrow-alt"></i>Move down</li>'}
+                                ${exercise.index == workout.exercises.length ? '' : '<li id="option-move-down"><i class="bx bx-down-arrow-alt"></i>Move down</li>'}
                                 <li id="option-delete">
                                     <i class="bx bx-trash"></i>
                                     Delete
@@ -312,7 +330,7 @@ const App = {
             console.log("ExercisePage::exerciseDoesntExist");
             return;
         }
-// 
+
         App.$.linkBackText.innerText = `Back to ${workout.name}`;
         App.$.linkBack.href      = `#/workout/${workout.id}`;
 

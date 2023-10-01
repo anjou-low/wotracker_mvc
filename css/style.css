@@ -46,6 +46,7 @@
     --clr-text-header: #8f9098;
     --clr-background-btn: #5d7cfc;
     --clr-text-btn: #ffffff;
+    --clr-red: #d9252e;
 
     --clr-dark-blue: #555b6e;
     --clr-text-color: #555b6e;
@@ -70,6 +71,55 @@
 
 .show-intercept {
     display: block;
+}
+
+.alert {
+    display: none;
+    position: fixed;
+    min-width: 300px;
+    max-width: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem 1rem 1rem;
+
+    background-color: white;
+    border-left: .5rem solid var(--clr-danger-red);
+    border-radius: var(--radius-big);
+    /* height: 75px; */
+    color: black;
+
+}
+
+.show-alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 555;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.alert i {
+    color: var(--clr-danger-red);
+    font-size: 2.5rem;
+    margin-right: .5rem;
+}
+
+.alert button {
+    outline: none;
+    background: none;
+    border: none;
+    margin-left: 1rem;
+    font-size: 1rem;
+}
+
+.alert button:hover {
+    cursor: pointer;
 }
 
 html {
